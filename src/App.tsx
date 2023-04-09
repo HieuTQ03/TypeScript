@@ -3,8 +3,8 @@ import { Route, Routes } from "react-router-dom";
 import {
   addProduct,
   getProducts,
-  removeProduct,
-  updateProduct
+  removeProduct
+  // updateProduct
 } from "./api/product";
 import AdminLayout from "./components/adminLayout";
 import ProductList from "./components/productList";
@@ -38,14 +38,14 @@ function App() {
       setProduct(newProducts);
     } catch (error) {}
   };
-  const onHandleUpdate = async (product: IProduct) => {
-    try {
-      await updateProduct(product);
-      const { data } = await getProducts();
-      const newProducts = data.product.docs;
-      setProduct(newProducts);
-    } catch (error) {}
-  };
+  // const onHandleUpdate = async (product: IProduct) => {
+  //   try {
+  //     await updateProduct(product);
+  //     const { data } = await getProducts();
+  //     const newProducts = data.product.docs;
+  //     setProduct(newProducts);
+  //   } catch (error) {}
+  // };
   const onHandleAdd = async (product: IProduct) => {
     try {
       await addProduct(product);
@@ -83,7 +83,7 @@ function App() {
             element={<AddProductPage onAdd={onHandleAdd} />}
           />
 
-          <Route
+          {/* <Route
             path="products/:id/update"
             element={
               <UpdateProductPage
@@ -91,7 +91,7 @@ function App() {
                 products={products}
               />
             }
-          />
+          /> */}
         </Route>
       </Routes>
     </div>
