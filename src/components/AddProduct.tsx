@@ -1,41 +1,43 @@
 import React from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
 import { IProduct } from "../interfaces/product";
-import { Button, Checkbox, Form, Input, message } from "antd";
+import { Button, Checkbox, Form, Input, Upload } from "antd";
 import { useNavigate } from "react-router-dom";
-import { Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 interface IProps {
   onAdd: (product: IProduct) => void;
 }
 
 const AddProductPage = (props: IProps) => {
-  const { Dragger } = Upload;
   const navigate = useNavigate();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm<IProduct>();
+  const onFinish = (values: any) => {
+    props.onAdd(values);
+    navigate("/admin/products");
+  };
 
-  const onSubmit: SubmitHandler<IProduct> = (data) => {
-    console.log(data);
-
-    props.onAdd(data);
-    // navigate("/admin/products");
+  const onFinishFailed = (errorInfo: any) => {
+    console.log("Failed:", errorInfo);
   };
 
   return (
     <div>
       <h1>Thêm sản phẩm</h1>
-      <Form onFinish={handleSubmit(onSubmit)}>
+      <Form
+        name="basic"
+        labelCol={{ span: 7 }}
+        wrapperCol={{ span: 16 }}
+        style={{ width: 1000 }}
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+      >
         <Form.Item
           label="Product Name"
           name="name"
           rules={[{ required: true, message: "Please input product name!" }]}
         >
-          <Input {...register("name")} />
+          <Input />
         </Form.Item>
 
         <Form.Item
@@ -43,20 +45,9 @@ const AddProductPage = (props: IProps) => {
           name="price"
           rules={[{ required: true, message: "Please input product price!" }]}
         >
-          <Input {...register("price")} />
+          <Input />
         </Form.Item>
-        <Dragger {...props}>
-          <p className="ant-upload-drag-icon">
-            <InboxOutlined />
-          </p>
-          <p className="ant-upload-text">
-            Click or drag file to this area to upload
-          </p>
-          <p className="ant-upload-hint">
-            Support for a single or bulk upload. Strictly prohibit from
-            uploading company data or other band files
-          </p>
-        </Dragger>
+
         <Form.Item
           label="Product Description"
           name="description"
@@ -64,19 +55,38 @@ const AddProductPage = (props: IProps) => {
             { required: true, message: "Please input product description!" }
           ]}
         >
-          <Input {...register("description")} />
+          <Input.TextArea />
+        </Form.Item>
+        <Form.Item
+          label="Product Image"
+          name="image"
+          valuePropName="fileList"
+          getValueFromEvent={(e: any) => e && e.fileList}
+          rules={[{ required: false, message: "Please upload product image!" }]}
+        >
+          <Upload.Dragger name="image">
+            <p className="ant-upload-drag-icon">
+              <InboxOutlined />
+            </p>
+            <p className="ant-upload-text">Click or drag file to this area</p>
+            <p className="ant-upload-hint">
+              Support for a single upload. Strictly prohibit from uploading
+              company data or other band files
+            </p>
+          </Upload.Dragger>
         </Form.Item>
 
         <Form.Item
-          label="Product Category ID"
+          label="Product Category"
           name="categoryId"
           rules={[
-            { required: true, message: "Please input product category ID!" }
+            { required: true, message: "Please select a product category!" }
           ]}
         >
-          <Input {...register("categoryId")} />
+          <Input />
         </Form.Item>
-        <Form.Item>
+
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button type="primary" htmlType="submit">
             Add New Product
           </Button>

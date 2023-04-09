@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { IProduct } from "../interfaces/product";
 import { Button, Form, Input } from "antd";
-
 interface IProps {
   products: IProduct[];
   onUpdate: (product: IProduct) => void;
@@ -11,51 +10,41 @@ interface IProps {
 const UpdateProductPage = (props: IProps) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [product, setProduct] = useState<IProduct>(); // khởi tạo biến state product có kiểu dữ liệu là IProduct
-  useEffect(() => {
-    // khi props thay đổi thì sẽ chạy useEffect này
-    const currentProduct = props.products.find(
-      (product: IProduct) => product.id == Number(id)
-    );
-    // tìm trong mảng props.products có phần tử nào có id trùng với id trên url không
-    setProduct(currentProduct); // nếu có thì set lại giá trị cho biến product
-  }, [props]);
-  useEffect(() => {
-    // khi biến product thay đổi thì sẽ chạy useEffect này
-    setFields(); // gọi hàm setFields để set lại giá trị cho các input
-  }, [product]);
 
+  const [product, setProduct] = useState<IProduct>();
+
+  useEffect(() => {
+    const currentProduct = props.products.find(
+      (product: IProduct) => product._id == String(id)
+    );
+    setProduct(currentProduct);
+  }, [props]);
+
+  useEffect(() => {
+    setFields();
+  }, [product]);
   const [form] = Form.useForm();
 
   const setFields = () => {
-    // hàm này để set lại giá trị cho các input
     form.setFieldsValue({
-      // gọi hàm setFieldsValue của instance form để set lại giá trị cho các input dựa vào giá trị của biến product
-      id: product?.id,
+      id: product?._id,
       name: product?.name,
       price: product?.price
     });
   };
 
-  const onFinish = async (values: any) => {
+  const onFinish = (values: any) => {
     props.onUpdate(values);
-
     navigate("/admin/products");
   };
 
   return (
     <div>
-      <Form
-        form={form}
-        style={{ width: 800 }}
-        labelCol={{ span: 4 }}
-        onFinish={onFinish}
-      >
-        {/* đoạn này cần truyền cả id vào form khi submit để lấy được giá trị id truyền lên component App */}
+      <Form form={form} style={{ maxWidth: 600 }} onFinish={onFinish}>
         <Form.Item
           label=""
           name="id"
-          style={{ display: "none" }} // ẩn input này đi
+          style={{ display: "none" }}
           rules={[{ required: true, message: "Please input your username!" }]}
         >
           <Input />

@@ -12,9 +12,13 @@ export const removeProduct = (id: string | number) => {
     }
   });
 };
-// export const updateProduct = (product: IProduct) => {
-//   return instance.put("/products/" + product.id, product);
-// };
+export const updateProduct = (product: IProduct) => {
+  return instance.patch(`/products/${product._id}/update`, product, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
+};
 export const addProduct = (product: IProduct) => {
   return instance.post("/products/add", product, {
     headers: {
