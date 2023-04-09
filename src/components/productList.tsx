@@ -66,7 +66,7 @@ const ProductList = (props: Props) => {
           </Button>
 
           <Button type="primary" icon={<EditOutlined />}>
-            <Link to={`/admin/products/${record._id}/update`}>edit </Link>
+            <Link to={`/admin/products/${record._id}/update`}> edit </Link>
           </Button>
         </Space>
       )
@@ -85,7 +85,7 @@ const ProductList = (props: Props) => {
       <Button type="primary" icon={<PlusOutlined />}>
         <Link to={"/admin/products/add"}> Add New</Link>
       </Button>
-      <Table columns={columns} dataSource={data} pagination={{ pageSize: 3 }} />
+      <Table columns={columns} dataSource={data} pagination={{ pageSize: 5 }} />
     </div>
   );
 };

@@ -46,10 +46,13 @@ function App() {
       setProduct(newProducts);
     } catch (error) {}
   };
-  const onHandleAdd = (product: IProduct) => {
-    addProduct(product).then(() =>
-      getProducts().then(({ data }) => setProduct(data))
-    );
+  const onHandleAdd = async (product: IProduct) => {
+    try {
+      await addProduct(product);
+      const { data } = await getProducts();
+      const newProducts = data.product.docs;
+      setProduct(newProducts);
+    } catch (error) {}
   };
 
   return (
