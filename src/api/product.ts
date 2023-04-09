@@ -13,7 +13,7 @@ export const removeProduct = (id: string | number) => {
   });
 };
 export const updateProduct = (product: IProduct) => {
-  return instance.patch(`/products/${product._id}/update`, product, {
+  return instance.patch(`/products/${product.id}/update`, product, {
     headers: {
       Authorization: `Bearer ${accessToken}`
     }

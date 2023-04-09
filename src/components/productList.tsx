@@ -5,8 +5,10 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import Table, { ColumnsType } from "antd/es/table";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { ICategory } from "../interfaces/categorys";
 type Props = {
   products: IProduct[];
+  categorys: ICategory[];
   onRemove: (_id: number | string) => void;
 };
 
@@ -51,6 +53,28 @@ const ProductList = (props: Props) => {
       dataIndex: "image",
       render: (image) => <img width={80} src={image} alt="" />
     },
+
+    {
+      title: "Category",
+      dataIndex: "categoryId",
+      key: "categoryId",
+      render: (categoryId) => {
+        const category = props.categorys.find((c) => c._id === categoryId);
+        return category?.name || "Unknown";
+      }
+    },
+
+    {
+      title: "CreatedAt",
+      dataIndex: "createdAt",
+      key: "createdAt"
+    },
+    {
+      title: "UpdatedAt",
+      dataIndex: "updatedAt",
+      key: "updatedAt"
+    },
+
     {
       title: "Action",
       key: "action",
@@ -82,9 +106,28 @@ const ProductList = (props: Props) => {
 
   return (
     <div>
-      <Button type="primary" icon={<PlusOutlined />}>
-        <Link to={"/admin/products/add"}> Add New</Link>
-      </Button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          paddingLeft: 6,
+          paddingRight: 6,
+          alignItems: "center"
+        }}
+      >
+        <div>
+          <h1>Danh sách sản phẩm</h1>
+        </div>
+        <div>
+          <Button
+            style={{ marginTop: 10, marginBottom: 10 }}
+            type="primary"
+            icon={<PlusOutlined />}
+          >
+            <Link to={"/admin/products/add"}> Add New</Link>
+          </Button>
+        </div>
+      </div>
       <Table columns={columns} dataSource={data} pagination={{ pageSize: 5 }} />
     </div>
   );

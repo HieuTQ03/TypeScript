@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import {
   addProduct,
   getProducts,
@@ -18,9 +18,13 @@ import UpdateProductPage from "./components/updateProduct";
 import AddProductPage from "./components/AddProduct";
 import ProductDetailPage from "./pages/layouts/ProductDetail";
 import Signup from "./pages/signup";
+import { ICategory } from "./interfaces/categorys";
+import { getAllCategory } from "./api/categorys";
 
 function App() {
   const [products, setProduct] = useState<IProduct[]>([]);
+  const [categoris, setCategoris] = useState<ICategory[]>([]);
+
   useEffect(() => {
     (async () => {
       try {
@@ -54,6 +58,19 @@ function App() {
       setProduct(newProducts);
     } catch (error) {}
   };
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { data } = await getAllCategory();
+        const newCategorys = data.data;
+        setCategoris(newCategorys);
+      } catch (error) {
+        console.log("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   return (
     <div className="App">
@@ -71,16 +88,23 @@ function App() {
         </Route>
         <Route path="signin" element={<Signin />} />
         <Route path="signup" element={<Signup />} />
+
         <Route path="admin" element={<AdminLayout />}>
           <Route
             path="products"
             element={
-              <ProductList onRemove={onHandelRemove} products={products} />
+              <ProductList
+                onRemove={onHandelRemove}
+                products={products}
+                categorys={categoris}
+              />
             }
           />
           <Route
             path="products/add"
-            element={<AddProductPage onAdd={onHandleAdd} />}
+            element={
+              <AddProductPage onAdd={onHandleAdd} categorys={categoris} />
+            }
           />
 
           <Route
@@ -89,6 +113,7 @@ function App() {
               <UpdateProductPage
                 onUpdate={onHandleUpdate}
                 products={products}
+                categorys={categoris}
               />
             }
           />

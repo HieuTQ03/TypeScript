@@ -1,9 +1,12 @@
 import React from "react";
 import { IProduct } from "../interfaces/product";
-import { Button, Checkbox, Form, Input, Upload } from "antd";
+import { Button, Checkbox, Form, Input, Select, Upload } from "antd";
 import { useNavigate } from "react-router-dom";
 import { InboxOutlined } from "@ant-design/icons";
+import { ICategory } from "../interfaces/categorys";
+import Swal from "sweetalert2";
 interface IProps {
+  categorys: ICategory[];
   onAdd: (product: IProduct) => void;
 }
 
@@ -11,14 +14,18 @@ const AddProductPage = (props: IProps) => {
   const navigate = useNavigate();
 
   const onFinish = (values: any) => {
-    props.onAdd(values);
+    Swal.fire("Good!", "Thêm sản phẩm thành công", "success").then(() =>
+      props.onAdd(values)
+    );
     navigate("/admin/products");
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
-
+  const categoryOptions = props.categorys.map((category) => {
+    return { label: category.name, value: category._id };
+  });
   return (
     <div>
       <h1>Thêm sản phẩm</h1>
@@ -79,11 +86,9 @@ const AddProductPage = (props: IProps) => {
         <Form.Item
           label="Product Category"
           name="categoryId"
-          rules={[
-            { required: true, message: "Please select a product category!" }
-          ]}
+          rules={[{ required: true, message: "Please select a category!" }]}
         >
-          <Input />
+          <Select options={categoryOptions} />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
