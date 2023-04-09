@@ -42,7 +42,7 @@ const UpdateProductPage = (props: IProps) => {
       name: product?.name,
       price: product?.price,
       description: product?.description,
-      categoryId: category?.name
+      categoryId: category?._id
     });
   };
 
@@ -92,7 +92,7 @@ const UpdateProductPage = (props: IProps) => {
         <Form.Item
           label="Product Category"
           name="categoryId"
-          rules={[{ required: true, message: "Please select a category!" }]}
+          rules={[{ required: false, message: "Please select a category!" }]}
         >
           <Select options={categoryOptions} />
         </Form.Item>
