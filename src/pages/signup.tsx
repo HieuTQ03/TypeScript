@@ -4,35 +4,26 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../api/auth";
+import { IRegister } from "../interfaces/user";
 
-type Props = {};
+type Props = {
+  onAdd: (user: IRegister) => void;
+};
 
 const Signup = (props: Props) => {
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    watch
-  } = useForm();
   const navigate = useNavigate();
 
-  const onSubmit = async (data: any) => {
-    const { data: user } = await signup(data);
-    localStorage.setItem("user", JSON.stringify(user));
-    console.log(data);
+  const onSubmit = async (values: any) => {
+    props.onAdd(values);
+    console.log(props);
 
     message.success("Đăng kí thành công!");
     navigate("/signin");
   };
 
-  const validatePassword = (value: string) => {
-    const password = watch("password");
-    return value === password || "Mật khẩu không khớp!";
-  };
-
   return (
     <Form
-      onFinish={handleSubmit(onSubmit)}
+      onFinish={onSubmit}
       className="signup-form"
       style={{ width: 600, margin: "auto" }}
     >
@@ -41,11 +32,7 @@ const Signup = (props: Props) => {
         name="name"
         rules={[{ required: true, message: "Please input your name!" }]}
       >
-        <Input
-          prefix={<UserOutlined />}
-          placeholder="Name"
-          {...register("name")}
-        />
+        <Input prefix={<UserOutlined />} placeholder="Name" />
       </Form.Item>
       <Form.Item
         name="email"
@@ -54,11 +41,7 @@ const Signup = (props: Props) => {
           { type: "email", message: "Please input a valid email!" }
         ]}
       >
-        <Input
-          prefix={<UserOutlined />}
-          placeholder="Email"
-          {...register("email")}
-        />
+        <Input prefix={<UserOutlined />} placeholder="Email" />
       </Form.Item>
       <Form.Item
         name="password"
@@ -67,11 +50,7 @@ const Signup = (props: Props) => {
           { min: 6, message: "Password must be at least 6 characters!" }
         ]}
       >
-        <Input.Password
-          prefix={<LockOutlined />}
-          placeholder="Password"
-          {...register("password")}
-        />
+        <Input.Password prefix={<LockOutlined />} placeholder="Password" />
       </Form.Item>
       <Form.Item
         name="confirmPassword"
@@ -90,7 +69,6 @@ const Signup = (props: Props) => {
         <Input.Password
           prefix={<LockOutlined />}
           placeholder="Confirm password"
-          {...register("confirmPassword")}
         />
       </Form.Item>
       <Form.Item>

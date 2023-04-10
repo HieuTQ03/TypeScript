@@ -20,6 +20,8 @@ import ProductDetailPage from "./pages/layouts/ProductDetail";
 import Signup from "./pages/signup";
 import { ICategory } from "./interfaces/categorys";
 import { getAllCategory } from "./api/categorys";
+import { IRegister } from "./interfaces/user";
+import { signup } from "./api/auth";
 
 function App() {
   const [products, setProduct] = useState<IProduct[]>([]);
@@ -49,6 +51,10 @@ function App() {
       const newProducts = data.product.docs;
       setProduct(newProducts);
     } catch (error) {}
+  };
+  const onHandleRegister = async (user: IRegister) => {
+    await signup(user);
+    console.log(user);
   };
   const onHandleAdd = async (product: IProduct) => {
     try {
@@ -87,7 +93,7 @@ function App() {
           />
         </Route>
         <Route path="signin" element={<Signin />} />
-        <Route path="signup" element={<Signup />} />
+        <Route path="signup" element={<Signup onAdd={onHandleRegister} />} />
 
         <Route path="admin" element={<AdminLayout />}>
           <Route
