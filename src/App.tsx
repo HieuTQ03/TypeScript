@@ -116,6 +116,7 @@ function App() {
       setCategoris(newCategories);
     } catch (error) {}
   };
+
   return (
     <div className="App">
       <Routes>

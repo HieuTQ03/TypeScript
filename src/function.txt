@@ -1,0 +1,13 @@
+Chức năng :
+ + Thêm , sửa ,xóa sản phẩm
+ + Lấy tên danh mục khi thêm sửa  
+ + Thêm ,sửa , xóa danh mục 
+ + Confirm khi thêm sửa xóa
+ + sử dụng giao diện antdesign cho phần quản trị 
+ + Đăng kí 
+ + Đăng nhập 
+ + Validate form
+ + Phía client có phần hiển thị sản phẩm 
+ + Chi tiết sản phẩm
+ 
+ 
