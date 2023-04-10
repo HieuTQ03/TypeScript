@@ -23,6 +23,7 @@ const UpdateProductPage = (props: IProps) => {
 
     setProduct(currentProduct);
   }, [props]);
+
   useEffect(() => {
     setFields();
   }, [product]);

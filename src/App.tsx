@@ -19,9 +19,17 @@ import AddProductPage from "./components/AddProduct";
 import ProductDetailPage from "./pages/layouts/ProductDetail";
 import Signup from "./pages/signup";
 import { ICategory } from "./interfaces/categorys";
-import { getAllCategory } from "./api/categorys";
+import {
+  addCategory,
+  getAllCategory,
+  removeCategory,
+  updateCategory
+} from "./api/categorys";
 import { IRegister } from "./interfaces/user";
 import { signup } from "./api/auth";
+import AddCategory from "./components/addCategory";
+import CategoriesList from "./components/categoryList";
+import UpdateCategory from "./components/updateCategory";
 
 function App() {
   const [products, setProduct] = useState<IProduct[]>([]);
@@ -53,8 +61,9 @@ function App() {
     } catch (error) {}
   };
   const onHandleRegister = async (user: IRegister) => {
-    await signup(user);
-    console.log(user);
+    try {
+      await signup(user);
+    } catch (error) {}
   };
   const onHandleAdd = async (product: IProduct) => {
     try {
@@ -64,6 +73,7 @@ function App() {
       setProduct(newProducts);
     } catch (error) {}
   };
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -78,6 +88,34 @@ function App() {
     fetchCategories();
   }, []);
 
+  const onHandleAddCategory = async (categories: ICategory) => {
+    try {
+      await addCategory(categories);
+      const { data } = await getAllCategory();
+
+      const newCategories = data.data;
+      setCategoris(newCategories);
+    } catch (error) {}
+  };
+
+  const onHandleRemoveCategory = async (id: String | Number) => {
+    try {
+      await removeCategory(id);
+      const { data } = await getAllCategory();
+      const newCategories = data.data;
+      setCategoris(newCategories);
+    } catch (error) {}
+  };
+  const onHandleUpdateCategory = async (categories: ICategory) => {
+    try {
+      await updateCategory(categories);
+      const { data } = await getAllCategory();
+      const newCategories = data.data;
+      console.log(newCategories);
+
+      setCategoris(newCategories);
+    } catch (error) {}
+  };
   return (
     <div className="App">
       <Routes>
@@ -107,12 +145,35 @@ function App() {
             }
           />
           <Route
+            path="categorys"
+            element={
+              <CategoriesList
+                onRemove={onHandleRemoveCategory}
+                categorys={categoris}
+              />
+            }
+          />
+          <Route
+            path="categorys/add"
+            element={
+              <AddCategory onAdd={onHandleAddCategory} categorys={categoris} />
+            }
+          />
+          <Route
+            path="categorys/:id/update"
+            element={
+              <UpdateCategory
+                onUpdate={onHandleUpdateCategory}
+                categorys={categoris}
+              />
+            }
+          />
+          <Route
             path="products/add"
             element={
               <AddProductPage onAdd={onHandleAdd} categorys={categoris} />
             }
           />
-
           <Route
             path="products/:id/update"
             element={

@@ -32,11 +32,12 @@ const items: MenuItem[] = [
   getItem("Option 1", "1", <PieChartOutlined />),
   getItem("Option 2", "2", <DesktopOutlined />),
   getItem("Product", "sub1", <UserOutlined />, [
-    getItem("Add Product", "3", <Link to="/admin/products/add" />)
+    getItem("List Products ", "3", <Link to="/admin/products" />),
+    getItem("Add Product", "4", <Link to="/admin/products/add" />)
   ]),
-  getItem("Team", "sub2", <TeamOutlined />, [
-    getItem("Team 1", "6"),
-    getItem("Team 2", "8")
+  getItem("Categorie", "sub2", <TeamOutlined />, [
+    getItem("List Categories ", "5", <Link to="/admin/categorys" />),
+    getItem("Add Categories ", "6", <Link to="/admin/categorys/add" />)
   ]),
   getItem("Files", "9", <FileOutlined />)
 ];
