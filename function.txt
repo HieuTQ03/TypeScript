@@ -2,6 +2,8 @@ Chức năng :
  + Thêm , sửa ,xóa sản phẩm
  + Lấy tên danh mục khi thêm sửa  
  + Thêm ,sửa , xóa danh mục 
+ + Check quyền truy cập đến trang admin phải đăng nhập kiểm tra đúng admin mới chuyển hướng sang admin
+ + Bắn message lỗi ra khi trùng email
  + Confirm khi thêm sửa xóa
  + sử dụng giao diện antdesign cho phần quản trị 
  + Đăng kí 

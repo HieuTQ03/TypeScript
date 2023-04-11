@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Button, message } from "antd";
+import { Form, Input, Button, message, notification } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -14,11 +14,16 @@ const Signup = (props: Props) => {
   const navigate = useNavigate();
 
   const onSubmit = async (values: any) => {
-    props.onAdd(values);
-    console.log(props);
-
-    message.success("Đăng kí thành công!");
-    navigate("/signin");
+    try {
+      await signup(values);
+      message.success("Đăng kí thành công!");
+      navigate("/signin");
+    } catch (error: any) {
+      console.log(error.response?.data.mess);
+      notification.error({
+        message: error?.response?.data?.messsage || error.message
+      });
+    }
   };
 
   return (

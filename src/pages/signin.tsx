@@ -13,10 +13,11 @@ const Signin = (props: Props) => {
     formState: { errors }
   } = useForm();
   const navigate = useNavigate();
+
   const onFinish = async (data: any) => {
     const { data: user } = await login(data);
     localStorage.setItem("user", JSON.stringify(user));
-    console.log();
+   
 
     message.success("Đăng nhập thành công!");
     if (user.user.role == "admin") {

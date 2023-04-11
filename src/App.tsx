@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import {
   addProduct,
   getProducts,
@@ -117,6 +117,11 @@ function App() {
     } catch (error) {}
   };
 
+  function RequireAdminRole() {
+    const user = JSON.parse(localStorage.getItem('user')!);
+    const role = user.user.role;
+    return role === 'admin' ? <Outlet /> : <Navigate to='/signin' />;
+  }
   return (
     <div className="App">
       <Routes>
@@ -134,57 +139,62 @@ function App() {
         <Route path="signin" element={<Signin />} />
         <Route path="signup" element={<Signup onAdd={onHandleRegister} />} />
 
-        <Route path="admin" element={<AdminLayout />}>
-          <Route
-            path="products"
-            element={
-              <ProductList
-                onRemove={onHandelRemove}
-                products={products}
-                categorys={categoris}
-              />
-            }
-          />
-          <Route
-            path="categorys"
-            element={
-              <CategoriesList
-                onRemove={onHandleRemoveCategory}
-                categorys={categoris}
-              />
-            }
-          />
-          <Route
-            path="categorys/add"
-            element={
-              <AddCategory onAdd={onHandleAddCategory} categorys={categoris} />
-            }
-          />
-          <Route
-            path="categorys/:id/update"
-            element={
-              <UpdateCategory
-                onUpdate={onHandleUpdateCategory}
-                categorys={categoris}
-              />
-            }
-          />
-          <Route
-            path="products/add"
-            element={
-              <AddProductPage onAdd={onHandleAdd} categorys={categoris} />
-            }
-          />
-          <Route
-            path="products/:id/update"
-            element={
-              <UpdateProductPage
-                onUpdate={onHandleUpdate}
-                products={products}
-                categorys={categoris}
-              />
-            }
-          />
+        <Route element={<RequireAdminRole />}>
+          <Route path="admin" element={<AdminLayout />}>
+            <Route
+              path="products"
+              element={
+                <ProductList
+                  onRemove={onHandelRemove}
+                  products={products}
+                  categorys={categoris}
+                />
+              }
+            />
+            <Route
+              path="categorys"
+              element={
+                <CategoriesList
+                  onRemove={onHandleRemoveCategory}
+                  categorys={categoris}
+                />
+              }
+            />
+            <Route
+              path="categorys/add"
+              element={
+                <AddCategory
+                  onAdd={onHandleAddCategory}
+                  categorys={categoris}
+                />
+              }
+            />
+            <Route
+              path="categorys/:id/update"
+              element={
+                <UpdateCategory
+                  onUpdate={onHandleUpdateCategory}
+                  categorys={categoris}
+                />
+              }
+            />
+            <Route
+              path="products/add"
+              element={
+                <AddProductPage onAdd={onHandleAdd} categorys={categoris} />
+              }
+            />
+            <Route
+              path="products/:id/update"
+              element={
+                <UpdateProductPage
+                  onUpdate={onHandleUpdate}
+                  products={products}
+                  categorys={categoris}
+                />
+              }
+            />
+          </Route>
         </Route>
       </Routes>
     </div>
